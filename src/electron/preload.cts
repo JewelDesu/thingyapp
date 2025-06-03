@@ -10,6 +10,8 @@ electron.contextBridge.exposeInMainWorld('electron', {
             callback(stats);
         }),
     getStaticData: () => ipcInvoke("getStaticData"),
+
+    changeFrameAction: (payload) => ipcSend('changeFrameAction', payload),
 } satisfies Window['electron']);
 
 function ipcInvoke<Key extends keyof EventPayload>(
@@ -26,3 +28,12 @@ function ipcOn<Key extends keyof EventPayload>(
         electron.ipcRenderer.on(key, cb);
         return() => electron.ipcRenderer.off(key, cb);
 }
+
+function ipcSend<Key extends keyof EventPayload>(
+    key: Key, 
+    payload: EventPayload[Key]
+    ){
+        electron.ipcRenderer.on(key, payload);
+    }
+
+

@@ -12,6 +12,15 @@ export function ipcMainHandle<Key extends keyof EventPayload>(key: Key, handler:
         return handler();
     });
 }
+export function ipcMainOn<Key extends keyof EventPayload>(
+  key: Key,
+  handler: (payload: EventPayload[Key]) => void
+) {
+  ipcMain.on(key, (event, payload) => {
+    validateEventFrame(event.senderFrame!);
+    return handler(payload);
+  });
+}
 
 export function ipcWebContentsSend<Key extends keyof EventPayload>(key: Key, webContents: WebContents, payload: EventPayload[Key]){
     webContents.send(key, payload);
