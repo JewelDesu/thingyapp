@@ -14,7 +14,10 @@ type StaticData = {
 type EventPayload = {
     statistics: Statistics;
     getStaticData: StaticData;
+    changeView: View;
 }
+
+type View = 'CPU' | 'RAM' | 'STORAGE';
 
 type UnsubscribeFunction = () => void;
 
@@ -24,5 +27,9 @@ interface Window {
             callback: (statistics: Statistics) => void
         ) => UnsubscribeFunction;
         getStaticData: () => Promise<StaticData>;
+
+        subscribeChangeView: (
+            callback: (view: View) => void
+        ) => UnsubscribeFunction;
     }
 }
