@@ -24,5 +24,13 @@ header button {
 }
 
 #close {
-  
+  background-color: red;
+}
+
+#minimize {
+  background-color: yellow;
+}
+
+#maximize {
+  background-color: lime;
 }

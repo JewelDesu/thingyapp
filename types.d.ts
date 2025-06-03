@@ -11,16 +11,16 @@ type StaticData = {
     hostName: string;
 };
 
+type View = 'CPU' | 'RAM' | 'STORAGE';
+
+type FrameWindowAction = "MINIMIZE" | "MAXIMIZE" | "CLOSE";
+
 type EventPayload = {
     statistics: Statistics;
     getStaticData: StaticData;
     changeView: View;
     changeFrameAction: FrameWindowAction;
 }
-
-type View = 'CPU' | 'RAM' | 'STORAGE';
-
-type FrameWindowAction = "MINIMIZE" | "MAXIMIZE" | "CLOSE";
 
 type UnsubscribeFunction = () => void;
 

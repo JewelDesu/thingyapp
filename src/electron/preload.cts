@@ -30,10 +30,10 @@ function ipcOn<Key extends keyof EventPayload>(
 }
 
 function ipcSend<Key extends keyof EventPayload>(
-    key: Key, 
-    payload: EventPayload[Key]
-    ){
-        electron.ipcRenderer.on(key, payload);
-    }
+  key: Key,
+  payload: EventPayload[Key]
+) {
+  electron.ipcRenderer.send(key, payload);
+}
 
 

@@ -10,7 +10,7 @@ app.on("ready", () => {
         webPreferences:{
             preload: getPreloadPath(),
         },
-        frame: false,
+        //frame: false,
     });
     if(isDev()){
         mainWindow.loadURL('http://localhost:5123');
@@ -23,23 +23,45 @@ app.on("ready", () => {
         return getStaticData();
     })
 
-    ipcMainOn("changeFrameAction", (payload) => {
-        switch (payload) {
-            case 'CLOSE':
-                mainWindow.close();
-                console.log(payload);
-                break;
-            case 'MINIMIZE':
-                mainWindow.minimize();
-                break;
-            case 'MAXIMIZE':
-                mainWindow.maximize();
-                break;
-        }   
+  ipcMainOn('changeFrameAction', (payload) => {
+      switch (payload) {
+        case 'CLOSE':
+          mainWindow.close();
+          break;
+        case 'MAXIMIZE':
+          mainWindow.maximize();
+          break;
+        case 'MINIMIZE':
+          mainWindow.minimize();
+          break;
+      }
     });
 
     createMenu(mainWindow);
+    handleCloseEvents(mainWindow);
     new Tray(path.join(getAssetPath(), process.platform === "win32" ? 'icon.ico' : 'icon@2x.png'));
     
 });
 
+function handleCloseEvents(mainWindow: BrowserWindow) {
+  let willClose = false;
+
+  mainWindow.on('close', (e) => {
+    if (willClose) {
+      return;
+    }
+    e.preventDefault();
+    mainWindow.hide();
+    if (app.dock) {
+      app.dock.hide();
+    }
+  });
+
+  app.on('before-quit', () => {
+    willClose = true;
+  });
+
+  mainWindow.on('show', () => {
+    willClose = false;
+  });
+}
