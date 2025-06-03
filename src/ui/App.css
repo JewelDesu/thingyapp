@@ -1,12 +1,9 @@
-.chart {
-  height: 120px;
-  width: 300px;
+.charts {
+  padding: 0.5rem;
+  height: 418px;
 }
 
 header {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   text-align: right;
   padding: 0;
@@ -23,14 +20,41 @@ header button {
   -webkit-app-region: no-drag;
 }
 
-#close {
-  background-color: red;
+.window{
+  display: grid;
+  grid-template-columns: 24rem auto;
+  gap: 1rem;
+  align-items: center;
+  margin: 1rem;
+  max-width: 900px;
+  margin: auto;
 }
 
-#minimize {
-  background-color: yellow;
+.options {
+  display: block;
+  padding: 0.5rem;
+  width: 100%;
+  margin: 0.5rem 0;
+  background-color: rgb(54, 54, 54);
+}
+.options:hover {
+  background-color: rgba(71, 71, 71, 0.767);
 }
 
-#maximize {
-  background-color: lime;
+.optionChart {
+height: 90px;
+width: 100%;
+}
+
+.optionSelect {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.optionSelect :first-child {
+  font-weight: 500;
+}
+.optionSelect :nth-child(2) {
+  font-weight: 400;
+  font-size: 14px;
 }

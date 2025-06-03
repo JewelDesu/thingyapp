@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from 'react';
 import './App.css'
 import { useStatistics } from './statistics'
 import { Chart } from './Charts';
+import  Header  from './Header';
+import Options from './Options';
 
 function App() {
   const [activeView, setActiveView] = useState<View>('CPU');
@@ -10,6 +12,8 @@ function App() {
   const cpu = useMemo(() => statistics.map((stat) => stat.cpuUsage),[statistics]);
   const ram = useMemo(() => statistics.map((stat) => stat.ramUsage),[statistics]);
   const storage = useMemo(() => statistics.map((stat) => stat.storageData),[statistics]);
+  const staticData = getUserData();
+
   const active = useMemo(() => {
     switch (activeView) {
       case "CPU":
@@ -28,24 +32,32 @@ function App() {
 
   return (
     <div className="App">
-      <header>
-        <button id="minimize" onClick={() => window.electron.changeFrameAction('MINIMIZE')}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8"/>
-          </svg>
-        </button>
-        <button id="maximize" onClick={() => window.electron.changeFrameAction('MAXIMIZE')}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-          <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
-          </svg>
-        </button>
-        <button id="close" onClick={() => window.electron.changeFrameAction('CLOSE')}/>
-      </header>
-      <div className='chart'>
-        <Chart data={active} maxDataPoints={10}/>
+      <Header/>
+      <div>
+        <div className='window'>
+          <div>
+            <Options chart={cpu} title="CPU" subTitle={staticData?.cpuModel} onClick={() => setActiveView('CPU')} />
+            <Options chart={ram} title="RAM" subTitle={staticData?.totalMem} onClick={() => setActiveView('RAM')} />
+            <Options chart={storage} title="STORAGE" subTitle={staticData?.totalStorage} onClick={() => setActiveView('STORAGE')} />
+          </div>
+          <div className='charts'>
+            <Chart data={active} maxDataPoints={10}/>
+          </div>
+        </div>        
       </div>
     </div>
   );
 }
 
+function getUserData() {
+  const [userData, getUserData] = useState<StaticData | null> (null);
+
+  useEffect(() => {
+    (async () => {
+      getUserData(await window.electron.getStaticData())
+    })();
+  },[]);
+
+  return userData
+}
 export default App

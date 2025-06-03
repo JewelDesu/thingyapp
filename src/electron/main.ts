@@ -29,7 +29,7 @@ app.on("ready", () => {
           mainWindow.close();
           break;
         case 'MAXIMIZE':
-          mainWindow.maximize();
+          mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
           break;
         case 'MINIMIZE':
           mainWindow.minimize();

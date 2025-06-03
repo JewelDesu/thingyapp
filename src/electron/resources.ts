@@ -22,7 +22,7 @@ export function getStaticData() {
     const totalStorage = getStorage().total
     const cpuModel = os.cpus()[0].model;
     const hostName = os.userInfo().username;
-    const totalMem = Math.floor(osUtils.totalmem() / 1024)
+    const totalMem = Math.round(osUtils.totalmem() / 1024)
     return {
         totalStorage,
         cpuModel,
