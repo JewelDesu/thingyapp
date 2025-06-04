@@ -10,10 +10,12 @@ export function poll(mainWindow: BrowserWindow) {
         const cpuUsage = await getCpu();
         const ramUsage = await getRam();
         const storageData = await getStorage();
+        const ramInUse = await getRamUse();
         ipcWebContentsSend('statistics', mainWindow.webContents, {
             cpuUsage,
             ramUsage,
             storageData: storageData.usage,
+            ramInUse,
         });
     }, POLLING_INTERVAL)
 }
@@ -39,6 +41,10 @@ function getCpu(): Promise<number> {
 
 function getRam() {
     return 1 - osUtils.freememPercentage();
+}
+
+function getRamUse() {
+    return Math.floor( (os.totalmem() - os.freemem()) / 1_000_000_000) ;
 }
 
 function getStorage() {

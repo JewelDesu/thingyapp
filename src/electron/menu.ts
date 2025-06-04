@@ -41,4 +41,4 @@ export function createMenu(mainWindow: BrowserWindow) {
     },
 
 ]));
-}
+} 

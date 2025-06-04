@@ -9,9 +9,13 @@ import Options from './Options';
 function App() {
   const [activeView, setActiveView] = useState<View>('CPU');
   const statistics = useStatistics(10);
+  const statistics2 = useStatistics(1);
   const cpu = useMemo(() => statistics.map((stat) => stat.cpuUsage),[statistics]);
+  const cpu2 = useMemo(() => statistics2.map((stat) => stat.cpuUsage),[statistics2]);
   const ram = useMemo(() => statistics.map((stat) => stat.ramUsage),[statistics]);
   const storage = useMemo(() => statistics.map((stat) => stat.storageData),[statistics]);
+  const storage2 = useMemo(() => statistics2.map((stat) => stat.storageData),[statistics2]);
+  const ramInUse = useMemo(() => statistics2.map((stat) => stat.ramInUse), [statistics2]);
   const staticData = getUserData();
 
   const active = useMemo(() => {
@@ -25,6 +29,17 @@ function App() {
     }
   },[activeView, cpu, ram, storage]);
 
+  const activeInfo = useMemo(() => {
+    switch (activeView) {
+      case "CPU":
+        return cpu2;
+      case "RAM":
+        return ramInUse;
+      case "STORAGE":
+        return storage2;
+    }
+  },[activeView, cpu2, ramInUse, storage2]);
+
 
    useEffect(() => {
     return window.electron.subscribeChangeView((view) => setActiveView(view));
@@ -32,25 +47,30 @@ function App() {
 
   return (
     <div className="App">
-      <Header/>
+      <Header host={staticData?.hostName ?? ''}/>
       <div>
         <div className='window'>
-          <div>
-            <Options chart={cpu} title="CPU" subTitle={staticData?.cpuModel} onClick={() => setActiveView('CPU')} />
-            <Options chart={ram} title="RAM" subTitle={staticData?.totalMem} onClick={() => setActiveView('RAM')} />
-            <Options chart={storage} title="STORAGE" subTitle={staticData?.totalStorage} onClick={() => setActiveView('STORAGE')} />
-          </div>
           <div className='charts'>
-            <Chart data={active} maxDataPoints={10}/>
+            <Chart data={active} maxDataPoints={10} selectedView={activeView}/>
+            <div>
+              {activeView === 'CPU' ? `${Math.round(activeInfo[0] * 100)}%` : activeView === 'RAM' ? `${activeInfo} GB` : ''}
+            </div> 
           </div>
-        </div>        
+          <div>
+            <Options chart={cpu} title="CPU" view="CPU" subTitle={staticData?.cpuModel ?? ''} onClick={() => setActiveView('CPU')} />
+            <Options chart={ram} title="RAM" view="RAM" subTitle={(staticData?.totalMem.toString() ?? '') + " GB"} onClick={() => setActiveView('RAM')} />
+            <Options chart={storage} title="STORAGE" view="STORAGE" subTitle={(staticData?.totalStorage.toString() ?? '') + " GB"} onClick={() => setActiveView('STORAGE')} />
+          </div>
+
+        </div>   
+   
       </div>
     </div>
   );
 }
 
 function getUserData() {
-  const [userData, getUserData] = useState<StaticData | null> (null);
+  const [userData, getUserData] = useState<StaticData | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -60,4 +80,5 @@ function getUserData() {
 
   return userData
 }
+
 export default App

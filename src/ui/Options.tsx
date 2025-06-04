@@ -1,6 +1,6 @@
 import { Chart } from "./Charts";
 import './App.css'
-const Options = (props: {title: string, subTitle: string, chart:number[], onClick: () => void}) => {
+const Options = (props: {title: string, subTitle: string, chart:number[], view: View, onClick: () => void}) => {
     return(
         <button className="options" onClick={props.onClick}>
             <div className="optionSelect">
@@ -8,7 +8,7 @@ const Options = (props: {title: string, subTitle: string, chart:number[], onClic
                 <div>{props.subTitle}</div>
             </div>
             <div className="optionChart">
-                <Chart data={props.chart} maxDataPoints={10}/>
+                <Chart data={props.chart} maxDataPoints={10} selectedView={props.view}/>
             </div>
         </button>
     )

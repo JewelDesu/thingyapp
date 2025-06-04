@@ -2,6 +2,7 @@ type Statistics = {
     cpuUsage: number;
     ramUsage: number;
     storageData: number;
+    ramInUse: number;
 };
 
 type StaticData = {
