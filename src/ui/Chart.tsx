@@ -17,7 +17,7 @@ export function BaseChart(props: BaseChartProps) {
   return (
     <ResponsiveContainer width={'100%'} height={'100%'}>
       <AreaChart data={props.data}>
-        <CartesianGrid stroke="#333" strokeDasharray="1 1" fill="#344055" />
+        <CartesianGrid stroke="#333" strokeDasharray="1 1" fill="#5e5e5e" />
         <Area
           fillOpacity={0.3}
           fill={props.fill}

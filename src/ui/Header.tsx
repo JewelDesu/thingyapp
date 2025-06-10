@@ -2,7 +2,7 @@ export default function Header(props: {host: string}) {
     return(
         <header>
           <div className="titleBar">
-            {props.host}
+            Process manager
           </div>
           <div>
             <button id="minimize" onClick={() => window.electron.changeFrameAction('MINIMIZE')}>

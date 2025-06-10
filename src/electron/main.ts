@@ -28,6 +28,7 @@ app.on("ready", () => {
       switch (payload) {
         case 'CLOSE':
           mainWindow.close();
+          app.quit();
           break;
         case 'MAXIMIZE':
           mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
